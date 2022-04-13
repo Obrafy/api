@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
@@ -8,6 +9,16 @@ async function bootstrap() {
 
   // Instantiate config service
   const configService = app.get<ConfigService<ConfigInterface>>(ConfigService);
+
+  // Validate and Transform Global Pipes
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
 
   const port = configService.get('PORT', { infer: true });
   await app.listen(port);
