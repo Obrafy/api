@@ -5,7 +5,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 
 import { ConfigInterface, loader, validationSchema } from './config';
-import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -25,8 +24,6 @@ import { UsersModule } from './users/users.module';
         autoIndex: true,
       }),
     }),
-
-    UsersModule,
   ],
   controllers: [AppController],
   providers: [],
