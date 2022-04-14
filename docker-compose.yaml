@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    entrypoint: .docker/entrypoint.sh
+    container_name: api
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+    extra_hosts:
+      - 'host.docker.internal:172.17.0.1'
