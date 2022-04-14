@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
 
 import { AppController } from './app.controller';
 
-import { loader, validationSchema } from './config';
+import { ConfigInterface, loader, validationSchema } from './config';
 
 @Module({
   imports: [
@@ -13,6 +14,15 @@ import { loader, validationSchema } from './config';
       load: [loader],
       validationSchema: validationSchema,
       expandVariables: true,
+    }),
+
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService<ConfigInterface>) => ({
+        uri: configService.get('DB_URI', { infer: true }),
+        autoIndex: true,
+      }),
     }),
   ],
   controllers: [AppController],
