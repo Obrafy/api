@@ -9,7 +9,7 @@ async function bootstrap() {
   // Instantiate config service
   const configService = app.get<ConfigService<ConfigInterface>>(ConfigService);
 
-  const port = configService.get('PORT', { infer: true }) || 3000;
+  const port = configService.get('PORT', { infer: true });
   await app.listen(port);
 }
 bootstrap();
