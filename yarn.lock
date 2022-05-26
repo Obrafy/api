@@ -4223,7 +4223,7 @@ prompts@^2.0.1:
 
 "proto@git+https://github.com/obrafy/proto.git":
   version "1.0.0"
-  resolved "git+https://github.com/obrafy/proto.git#662658f6e8f47fb07daf84dfdef2c2cfe97fe72c"
+  resolved "git+https://github.com/obrafy/proto.git#8cef53bba9420389e7277afb6e73b32747c39dbc"
 
 protobufjs@^6.10.0, protobufjs@^6.8.8:
   version "6.11.2"
