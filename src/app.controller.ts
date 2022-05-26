@@ -1,6 +1,6 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { Roles } from './auth/decorators/role.decorator';
-import { Role } from 'src/common/proto/authentication-service/auth.pb';
+import { Role } from 'src/auth/enums/role.enum';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { RolesGuard } from './auth/guards/role.guard';
 
@@ -13,7 +13,7 @@ export class AppController {
 
   @Get('protected')
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(Role.ADMIN)
+  @Roles(Role.USER)
   protected(): string {
     return 'ok';
   }
