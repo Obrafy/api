@@ -32,12 +32,4 @@ export class AuthController {
   private async login(@Body() body: PROTO.LoginRequest): Promise<Observable<PROTO.LoginResponse>> {
     return this.authServiceClient.login(body);
   }
-
-  // @Put(':id/role')
-  // private async updateUserRole(
-  //   @Param('id') id: UpdateUserRoleRequest['userId'],
-  //   @Body() body: Omit<UpdateUserRoleRequest, 'userId'>,
-  // ): Promise<Observable<UpdateUserRoleResponse>> {
-  //   return this.authServiceClient.updateUserRole({ userId: id, roles: body.roles });
-  // }
 }

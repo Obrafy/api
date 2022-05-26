@@ -6,10 +6,7 @@ import { ConfigInterface } from 'src/config';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import * as PROTO from 'src/common/proto/authentication-service/auth.pb';
-
-const makeMicroserviceUrl = (host: string, port: string) => {
-  return `${host}:${port}`;
-};
+import makeMicroserviceUrl from 'src/common/helpers/microservice-url.helpers';
 
 @Global()
 @Module({
@@ -21,8 +18,8 @@ const makeMicroserviceUrl = (host: string, port: string) => {
           transport: Transport.GRPC,
           options: {
             url: makeMicroserviceUrl(
-              configService.get('AUTHENTICATION_HOST', { infer: true }),
-              configService.get('AUTHENTICATION_PORT', { infer: true }),
+              configService.get('PROJECT_HOST', { infer: true }),
+              configService.get('PROJECT_PORT', { infer: true }),
             ),
             package: PROTO.AUTH_PACKAGE_NAME,
             protoPath: join('node_modules', 'proto', 'proto-files', 'authentication-service', 'auth.proto'),

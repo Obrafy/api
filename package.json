@@ -21,7 +21,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "proto:install": "yarn add git+https://github.com/obrafy/proto.git",
     "proto:auth": "protoc --plugin=node_modules/.bin/protoc-gen-ts_proto -I=./node_modules/proto/proto-files --ts_proto_out=src/common/proto node_modules/proto/proto-files/authentication-service/auth.proto --ts_proto_opt=nestJs=true --ts_proto_opt=fileSuffix=.pb",
-    "proto:all": "yarn proto:auth"
+    "proto:project": "protoc --plugin=node_modules/.bin/protoc-gen-ts_proto -I=./node_modules/proto/proto-files --ts_proto_out=src/common/proto node_modules/proto/proto-files/project-service/project.proto --ts_proto_opt=nestJs=true --ts_proto_opt=fileSuffix=.pb",
+    "proto:all": "yarn proto:auth && yarn proto:project"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.6.6",

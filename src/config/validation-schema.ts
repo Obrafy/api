@@ -14,4 +14,7 @@ export default Joi.object<ConfigInterface>({
 
   AUTHENTICATION_HOST: Joi.string().hostname().default('localhost'),
   AUTHENTICATION_PORT: Joi.number().default(3010),
+
+  PROJECT_HOST: Joi.string().hostname().default('localhost'),
+  PROJECT_PORT: Joi.number().default(3020),
 });

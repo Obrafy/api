@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 
 import { ConfigInterface, loader, validationSchema } from './config';
 import { AuthModule } from './auth/auth.module';
+import { ProjectModule } from './project/project.module';
 
 @Module({
   imports: [
@@ -27,6 +28,8 @@ import { AuthModule } from './auth/auth.module';
     }),
 
     AuthModule,
+
+    ProjectModule,
   ],
   controllers: [AppController],
   providers: [],
