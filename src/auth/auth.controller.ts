@@ -1,36 +1,43 @@
-import { Body, Controller, Inject, Post, Put } from '@nestjs/common';
-import { ClientGrpc } from '@nestjs/microservices';
-import { Observable } from 'rxjs';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+
+import { AuthService } from './auth.service';
 import * as PROTO from 'src/common/proto/authentication-service/auth.pb';
+import * as DTO from 'src/auth/dto/auth.dto';
+import Long from 'long';
 
-@Controller('auth')
+@Controller()
 export class AuthController {
-  private authServiceClient: PROTO.AuthServiceClient;
-  private userManagementServiceClient: PROTO.UserManagementServiceClient;
-
-  @Inject(PROTO.AUTH_PACKAGE_NAME)
-  private readonly grpcClient: ClientGrpc;
-
-  /**
-   * This runs once when the module's instantiate the service.
-   *
-   * {@link https://docs.nestjs.com/fundamentals/lifecycle-events#lifecycle-events-1 Documentation}
-   */
-  public onModuleInit(): void {
-    this.authServiceClient = this.grpcClient.getService<PROTO.AuthServiceClient>(PROTO.AUTH_SERVICE_NAME);
-    this.userManagementServiceClient = this.grpcClient.getService<PROTO.UserManagementServiceClient>(
-      PROTO.USER_MANAGEMENT_SERVICE_NAME,
-    );
-  }
+  constructor(private authService: AuthService) {}
 
   @Post('register')
-  private async register(@Body() body: PROTO.RegisterRequest): Promise<Observable<PROTO.RegisterResponse>> {
-    return this.authServiceClient.register(body);
+  private async register(@Body() body: DTO.RegisterRequestDto): Promise<PROTO.RegisterResponse> {
+    return this.authService.register(body);
   }
 
   @Put('login')
-  private async login(@Body() body: PROTO.LoginRequest): Promise<Observable<PROTO.LoginResponse>> {
-    return this.authServiceClient.login(body);
+  private async login(@Body() body: DTO.LoginRequestDto): Promise<PROTO.LoginResponse> {
+    return this.authService.login(body);
+  }
+
+  @Put('user/:id/activate')
+  private async activateUser(
+    @Param('id') userId: DTO.ActivateUserRequestDto['userId'],
+  ): Promise<PROTO.ActivateUserByIdResponse> {
+    return this.authService.activateUser({ userId });
+  }
+
+  @Put('user/:id/deactivate')
+  private async deactivateUser(
+    @Param('id') userId: DTO.DeactivateUserRequestDto['userId'],
+  ): Promise<PROTO.DeactivateUserByIdResponse> {
+    return this.authService.deactivateUser({ userId });
+  }
+
+  @Get('user/:id/')
+  private async findUser(
+    @Param('id') userId: DTO.DeactivateUserRequestDto['userId'],
+  ): Promise<PROTO.DeactivateUserByIdResponse['data']> {
+    return await this.authService.findUserById({ userId });
   }
 
   // @Put(':id/role')
