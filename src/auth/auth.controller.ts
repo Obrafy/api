@@ -1,9 +1,19 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  UseInterceptors,
+} from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 import * as PROTO from 'src/common/proto/authentication-service/auth.pb';
 import * as DTO from 'src/auth/dto/auth.dto';
-import Long from 'long';
 
 @Controller()
 export class AuthController {
@@ -33,18 +43,55 @@ export class AuthController {
     return this.authService.deactivateUser({ userId });
   }
 
-  @Get('user/:id/')
-  private async findUser(
-    @Param('id') userId: DTO.DeactivateUserRequestDto['userId'],
-  ): Promise<PROTO.DeactivateUserByIdResponse['data']> {
-    return await this.authService.findUserById({ userId });
+  @Put('user/:id/roles')
+  private async addRoleToUser(
+    @Param('id') userId: DTO.AddRoleToUserRequestDto['userId'],
+    @Body('role') role: DTO.AddRoleToUserRequestDto['role'],
+  ): Promise<PROTO.AddRoleToUserResponse> {
+    return this.authService.addRoleToUser({ userId, role });
   }
 
-  // @Put(':id/role')
-  // private async updateUserRole(
-  //   @Param('id') id: UpdateUserRoleRequest['userId'],
-  //   @Body() body: Omit<UpdateUserRoleRequest, 'userId'>,
-  // ): Promise<Observable<UpdateUserRoleResponse>> {
-  //   return this.authServiceClient.updateUserRole({ userId: id, roles: body.roles });
-  // }
+  @Delete('user/:id/roles')
+  private async removeRoleFromUser(
+    @Param('id') userId: DTO.RemoveRoleFromUserRequestDto['userId'],
+    @Body('role') role: DTO.RemoveRoleFromUserRequestDto['role'],
+  ): Promise<PROTO.AddRoleToUserResponse> {
+    return this.authService.removeRoleFromUser({ userId, role });
+  }
+
+  @Delete('user/:id')
+  private async removeUser(
+    @Param('id') userId: DTO.RemoveUserRequestDto['userId'],
+  ): Promise<PROTO.AddRoleToUserResponse> {
+    return this.authService.removeUser({ userId });
+  }
+
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get('user/:id/')
+  private async findUser(
+    @Param('id') userId: DTO.FindUserRequestDto['userId'],
+  ): Promise<PROTO.FindUserByEmailResponse> {
+    const { data, error, status } = await this.authService.findUserById({ userId });
+
+    if (data && data.user) {
+      data.user = new DTO.UserDto(data.user);
+    }
+
+    return { data, error, status };
+  }
+
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get('users')
+  private async findAllUsers(
+    @Body() payload: DTO.FindAllUsersRequestDto,
+    @Query('roles') roles: DTO.FindAllUsersForRolesRequestDto['roles'],
+  ): Promise<PROTO.FindAllUsersResponse> {
+    const { data, error, status } = await this.authService.findAllUsers({ ...payload, roles });
+
+    if (data && data.users && data.users.length > 0) {
+      data.users = data.users.map((user) => new DTO.UserDto(user));
+    }
+
+    return { data, error, status };
+  }
 }
