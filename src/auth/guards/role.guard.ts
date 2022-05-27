@@ -24,7 +24,7 @@ export class RolesGuard implements CanActivate {
 
     const {
       data: { user },
-    } = await this.authService.findUserById(userId);
+    } = await this.authService.findUserById({ userId });
 
     return user.roles.includes(Role.SUDO) || requiredRoles.some((role) => user.roles.includes(role));
   }

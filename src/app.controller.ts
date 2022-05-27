@@ -13,8 +13,15 @@ export class AppController {
 
   @Get('protected')
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(Role.USER)
+  @Roles(Role.ADMIN)
   protected(): string {
+    return 'ok';
+  }
+
+  @Get('sudo-protected')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.SUDO)
+  sudoProtected(): string {
     return 'ok';
   }
 }
