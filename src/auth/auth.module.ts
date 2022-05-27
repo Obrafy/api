@@ -3,7 +3,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { ConfigInterface } from 'src/config';
-import { AuthController } from './auth.controller';
+import { AuthController } from './controllers/auth.controller';
+import { UserManagementController } from './controllers/user-management.controller';
+
 import { AuthService } from './auth.service';
 import * as PROTO from 'src/common/proto/authentication-service/auth.pb';
 
@@ -33,7 +35,7 @@ const makeMicroserviceUrl = (host: string, port: string) => {
       },
     ]),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, UserManagementController],
   providers: [AuthService],
   exports: [AuthService],
 })
