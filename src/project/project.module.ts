@@ -18,8 +18,8 @@ import { join } from 'path';
           transport: Transport.GRPC,
           options: {
             url: makeMicroserviceUrl(
-              configService.get('AUTHENTICATION_HOST', { infer: true }),
-              configService.get('AUTHENTICATION_PORT', { infer: true }),
+              configService.get('PROJECT_HOST', { infer: true }),
+              configService.get('PROJECT_PORT', { infer: true }),
             ),
             package: PROTO.PROJECT_PACKAGE_NAME,
             protoPath: join('node_modules', 'proto', 'proto-files', 'project-service', 'project.proto'),

@@ -1,7 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
-import * as PROTO from 'src/common/proto/project-service/project.pb';
+import { firstValueFrom } from 'rxjs';
 
+import * as PROTO from 'src/common/proto/project-service/project.pb';
+import * as DTO from 'src/project/dto/project.dto';
 @Injectable()
 export class ProjectService {
   private projectServiceClient: PROTO.ProjectServiceClient;
@@ -16,5 +18,9 @@ export class ProjectService {
    */
   public onModuleInit(): void {
     this.projectServiceClient = this.grpcClient.getService<PROTO.ProjectServiceClient>(PROTO.PROJECT_SERVICE_NAME);
+  }
+
+  async createProject(createProjectDto: DTO.CreateProjectDto): Promise<PROTO.ProjectCreateResponse> {
+    return await firstValueFrom(this.projectServiceClient.create(createProjectDto));
   }
 }

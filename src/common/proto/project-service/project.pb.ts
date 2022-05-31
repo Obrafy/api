@@ -8,11 +8,12 @@ export const protobufPackage = 'project';
 
 /** All Enums */
 export enum Status {
-  ACTIVE = 0,
-  INACTIVE = 1,
-  IN_PROGRESS = 2,
-  FINISHED = 3,
-  DELETED = 4,
+  INVALID = 0,
+  ACTIVE = 1,
+  INACTIVE = 2,
+  IN_PROGRESS = 3,
+  FINISHED = 4,
+  DELETED = 5,
   UNRECOGNIZED = -1,
 }
 
@@ -42,8 +43,7 @@ export interface ProjectCreateRequest {
   expectedFinishedDate: string;
   responsible: string;
   address: Address | undefined;
-  tasks: Task[];
-  status: Status;
+  tasks: string[];
 }
 
 /** Response */
@@ -205,6 +205,58 @@ export interface PossibleSkills {
 }
 
 /**
+ * ActivateProject
+ * Request
+ */
+export interface ActivateProjectRequest {
+  projectId: string;
+}
+
+/** Response */
+export interface ActivateProjectResponseData {}
+
+export interface ActivateProjectResponse {
+  status: number;
+  error: string[];
+  data: ActivateProjectResponse | undefined;
+}
+
+/**
+ * DeactivateProject
+ * Request
+ */
+export interface DeactivateProjectRequest {
+  projectId: string;
+}
+
+/** Response */
+export interface DeactivateProjectResponseData {}
+
+export interface DeactivateProjectResponse {
+  status: number;
+  error: string[];
+  data: DeactivateProjectResponse | undefined;
+}
+
+/**
+ * AddTasksToProject
+ * Request
+ */
+export interface AddTasksToProjectRequest {
+  projectId: string;
+  tasksIds: string[];
+}
+
+/** Response */
+export interface AddTasksToProjectResponseData {}
+
+export interface AddTasksToProjectResponse {
+  status: number;
+  error: string[];
+  data: AddTasksToProjectResponse | undefined;
+}
+
+/**
  * TaskCreate
  * Request
  */
@@ -221,8 +273,8 @@ export interface TaskCreateRequest {
 /** Response */
 export interface TaskCreateResponse {
   status: number;
-  error: string;
-  data: TaskData | undefined;
+  error: string[];
+  data: TaskResponseData | undefined;
 }
 
 /**
@@ -234,8 +286,8 @@ export interface TaskFindAllRequest {}
 /** Response */
 export interface TaskFindAllResponse {
   status: number;
-  error: string;
-  data: TaskData[];
+  error: string[];
+  data: TaskResponseData[];
 }
 
 /**
@@ -249,8 +301,8 @@ export interface TaskFindOneRequest {
 /** Response */
 export interface TaskFindOneResponse {
   status: number;
-  error: string;
-  data: TaskData | undefined;
+  error: string[];
+  data: TaskResponseData | undefined;
 }
 
 /**
@@ -265,8 +317,8 @@ export interface TaskUpdateRequest {
 /** Response */
 export interface TaskUpdateResponse {
   status: number;
-  error: string;
-  data: TaskData | undefined;
+  error: string[];
+  data: TaskResponseData | undefined;
 }
 
 export interface TaskUpdateData {
@@ -287,19 +339,79 @@ export interface TaskRemoveRequest {
 /** Response */
 export interface TaskRemoveResponse {
   status: number;
-  error: string;
+  error: string[];
   data: TaskRemoveDataResponse | undefined;
 }
 
 export interface TaskRemoveDataResponse {}
 
-export interface TaskData {
+export interface TaskResponse {
   category: string;
   activity: string;
-  noiseLevel: string;
-  dirtLevel: string;
+  noiseLevel: LevelType;
+  dirtLevel: LevelType;
+  description: string;
+  unity: UnityType;
   possibleSkills: PossibleSkills[];
+  status: Status;
+}
+
+export interface TaskResponseData {
+  task: TaskResponse | undefined;
+}
+
+/**
+ * ActivateTask
+ * Request
+ */
+export interface ActivateTaskRequest {
+  taskId: string;
+}
+
+/** Response */
+export interface ActivateTaskResponseData {}
+
+export interface ActivateTaskResponse {
+  status: number;
+  error: string[];
+  data: ActivateTaskResponseData | undefined;
+}
+
+/**
+ * DeactivateTask
+ * Request
+ */
+export interface DeactivateTaskRequest {
+  taskId: string;
+}
+
+/** Response */
+export interface DeactivateTaskResponseData {}
+
+export interface DeactivateTaskResponse {
+  status: number;
+  error: string[];
+  data: DeactivateTaskResponseData | undefined;
+}
+
+export interface SkillRequest {
   id: string;
+  requiredSkillLevel: number;
+}
+
+/** Request */
+export interface AddSkillToTaskRequest {
+  taskId: string;
+  skills: SkillRequest[];
+}
+
+/** Response */
+export interface AddSkillToTaskResponseData {}
+
+export interface AddSkillToTaskResponse {
+  status: number;
+  error: string[];
+  data: AddSkillToTaskResponseData | undefined;
 }
 
 export const PROJECT_PACKAGE_NAME = 'project';
@@ -318,6 +430,12 @@ export interface ProjectServiceClient {
   findAllTaskOfProject(request: FindAllTaskOfProjectRequest): Observable<FindAllTaskOfProjectResponse>;
 
   fieldsOverrides(request: FieldsOverridesRequest): Observable<FieldsOverridesResponse>;
+
+  activateProject(request: ActivateProjectRequest): Observable<ActivateProjectResponse>;
+
+  deactivateProject(request: DeactivateProjectRequest): Observable<DeactivateProjectResponse>;
+
+  addTasksToProject(request: AddTasksToProjectRequest): Observable<AddTasksToProjectResponse>;
 }
 
 export interface ProjectServiceController {
@@ -348,6 +466,18 @@ export interface ProjectServiceController {
   fieldsOverrides(
     request: FieldsOverridesRequest,
   ): Promise<FieldsOverridesResponse> | Observable<FieldsOverridesResponse> | FieldsOverridesResponse;
+
+  activateProject(
+    request: ActivateProjectRequest,
+  ): Promise<ActivateProjectResponse> | Observable<ActivateProjectResponse> | ActivateProjectResponse;
+
+  deactivateProject(
+    request: DeactivateProjectRequest,
+  ): Promise<DeactivateProjectResponse> | Observable<DeactivateProjectResponse> | DeactivateProjectResponse;
+
+  addTasksToProject(
+    request: AddTasksToProjectRequest,
+  ): Promise<AddTasksToProjectResponse> | Observable<AddTasksToProjectResponse> | AddTasksToProjectResponse;
 }
 
 export function ProjectServiceControllerMethods() {
@@ -360,6 +490,9 @@ export function ProjectServiceControllerMethods() {
       'remove',
       'findAllTaskOfProject',
       'fieldsOverrides',
+      'activateProject',
+      'deactivateProject',
+      'addTasksToProject',
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
@@ -385,6 +518,12 @@ export interface TaskServiceClient {
   update(request: TaskUpdateRequest): Observable<TaskUpdateResponse>;
 
   remove(request: TaskRemoveRequest): Observable<TaskRemoveResponse>;
+
+  activateTask(request: ActivateTaskRequest): Observable<ActivateTaskResponse>;
+
+  deactivateTask(request: DeactivateTaskRequest): Observable<DeactivateTaskResponse>;
+
+  addSkillToTask(request: AddSkillToTaskRequest): Observable<AddSkillToTaskResponse>;
 }
 
 export interface TaskServiceController {
@@ -401,11 +540,32 @@ export interface TaskServiceController {
   update(request: TaskUpdateRequest): Promise<TaskUpdateResponse> | Observable<TaskUpdateResponse> | TaskUpdateResponse;
 
   remove(request: TaskRemoveRequest): Promise<TaskRemoveResponse> | Observable<TaskRemoveResponse> | TaskRemoveResponse;
+
+  activateTask(
+    request: ActivateTaskRequest,
+  ): Promise<ActivateTaskResponse> | Observable<ActivateTaskResponse> | ActivateTaskResponse;
+
+  deactivateTask(
+    request: DeactivateTaskRequest,
+  ): Promise<DeactivateTaskResponse> | Observable<DeactivateTaskResponse> | DeactivateTaskResponse;
+
+  addSkillToTask(
+    request: AddSkillToTaskRequest,
+  ): Promise<AddSkillToTaskResponse> | Observable<AddSkillToTaskResponse> | AddSkillToTaskResponse;
 }
 
 export function TaskServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ['create', 'findAll', 'findOne', 'update', 'remove'];
+    const grpcMethods: string[] = [
+      'create',
+      'findAll',
+      'findOne',
+      'update',
+      'remove',
+      'activateTask',
+      'deactivateTask',
+      'addSkillToTask',
+    ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod('TaskService', method)(constructor.prototype[method], method, descriptor);
