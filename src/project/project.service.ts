@@ -23,4 +23,16 @@ export class ProjectService {
   async createProject(createProjectDto: DTO.CreateProjectDto): Promise<PROTO.ProjectCreateResponse> {
     return await firstValueFrom(this.projectServiceClient.create(createProjectDto));
   }
+
+  async findAllProjects(findAllProjectsDto: DTO.FindAllProjectsDto): Promise<PROTO.ProjectFindAllResponse> {
+    return await firstValueFrom(this.projectServiceClient.findAll(findAllProjectsDto));
+  }
+
+  async findProject(findProjectDto: DTO.FindProjectDto): Promise<PROTO.ProjectFindOneResponse> {
+    return await firstValueFrom(this.projectServiceClient.findOne(findProjectDto));
+  }
+
+  async removeProject(removeProjectDto: DTO.RemoveProjectDto): Promise<PROTO.ProjectRemoveResponse> {
+    return await firstValueFrom(this.projectServiceClient.remove(removeProjectDto));
+  }
 }

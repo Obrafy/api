@@ -79,10 +79,10 @@ export class ProjectDto implements PROTO.Project {
   @Transform(({ value }) => TransformEnums(InternalStatus, PROTO.Status, value))
   status: PROTO.Status;
 
-  @Transform(({ value }) => new Date(Number(value)))
+  @Transform(({ value }) => new Date(Number(value) * 1000)) // This seconds to milliseconds needs to be handled by the service
   startDate: number;
 
-  @Transform(({ value }) => new Date(Number(value)))
+  @Transform(({ value }) => new Date(Number(value) * 1000)) // This seconds to milliseconds needs to be handled by the service
   expectedFinishedDate: number;
 }
 
@@ -106,4 +106,16 @@ export class CreateProjectDto implements PROTO.ProjectCreateRequest {
 
   @Transform(({ value }) => TransformEnums(InternalStatus, PROTO.Status, value))
   status: PROTO.Status;
+}
+
+export class FindAllProjectsDto implements PROTO.ProjectFindAllRequest {}
+
+export class FindProjectDto implements PROTO.ProjectFindOneRequest {
+  @IsMongoId()
+  id: string;
+}
+
+export class RemoveProjectDto implements PROTO.ProjectRemoveRequest {
+  @IsMongoId()
+  id: string;
 }
