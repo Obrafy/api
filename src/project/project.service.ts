@@ -35,4 +35,28 @@ export class ProjectService {
   async removeProject(removeProjectDto: DTO.RemoveProjectDto): Promise<PROTO.ProjectRemoveResponse> {
     return await firstValueFrom(this.projectServiceClient.remove(removeProjectDto));
   }
+
+  async activateProject(activateProjectDto: DTO.ProjectStatusDto): Promise<PROTO.ActivateProjectResponse> {
+    return await firstValueFrom(this.projectServiceClient.activateProject(activateProjectDto));
+  }
+
+  async deactivateProject(deactivateProjectDto: DTO.ProjectStatusDto): Promise<PROTO.DeactivateProjectResponse> {
+    return await firstValueFrom(this.projectServiceClient.deactivateProject(deactivateProjectDto));
+  }
+
+  async addTasksToProject({ projectId, tasksIds }: DTO.AddTaskToProjectDto): Promise<PROTO.AddTasksToProjectResponse> {
+    return await firstValueFrom(this.projectServiceClient.addTasksToProject({ projectId, tasksIds }));
+  }
+
+  async removeTasksToProject({ projectId, tasksIds }: DTO.RemoveTaskToProjectDto): Promise<PROTO.RemoveTasksToProjectResponse> {
+    return await firstValueFrom(this.projectServiceClient.removeTasksToProject({ projectId, tasksIds }));
+  }
+
+  async addLaborersToProject({ projectId, taskId, laborers }: DTO.LaborersToProjectDto): Promise<PROTO.AddLaborersToProjectResponse> {
+    return await firstValueFrom(this.projectServiceClient.addLaborersToProject({ projectId, taskId, laborers }));
+  }
+
+  async removeLaborersToProject({ projectId, taskId, laborers }: DTO.LaborersToProjectDto): Promise<PROTO.RemoveLaborersToProjectResponse> {
+    return await firstValueFrom(this.projectServiceClient.removeLaborersToProject({ projectId, taskId, laborers }));
+  }
 }

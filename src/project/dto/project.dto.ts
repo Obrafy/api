@@ -108,14 +108,46 @@ export class CreateProjectDto implements PROTO.ProjectCreateRequest {
   status: PROTO.Status;
 }
 
-export class FindAllProjectsDto implements PROTO.ProjectFindAllRequest {}
+export class FindAllProjectsDto implements PROTO.ProjectFindAllRequest { }
 
 export class FindProjectDto implements PROTO.ProjectFindOneRequest {
   @IsMongoId()
-  id: string;
+  projectId: string;
 }
 
 export class RemoveProjectDto implements PROTO.ProjectRemoveRequest {
   @IsMongoId()
-  id: string;
+  projectId: string;
+}
+
+export class ProjectStatusDto implements PROTO.ActivateProjectRequest, PROTO.DeactivateProjectRequest {
+  @IsMongoId()
+  projectId: string;
+}
+
+export class AddTaskToProjectDto implements PROTO.AddTasksToProjectRequest {
+  @IsMongoId()
+  projectId: string;
+
+  @IsMongoId({ each: true })
+  tasksIds: string[];
+}
+
+export class RemoveTaskToProjectDto implements PROTO.RemoveTasksToProjectRequest {
+  @IsMongoId()
+  projectId: string;
+
+  @IsMongoId({ each: true })
+  tasksIds: string[];
+}
+
+export class LaborersToProjectDto implements PROTO.AddLaborersToProjectRequest, PROTO.RemoveLaborersToProjectRequest {
+  @IsMongoId()
+  projectId: string;
+
+  @IsMongoId()
+  taskId: string;
+
+  @IsMongoId({ each: true })
+  laborers: string[];
 }

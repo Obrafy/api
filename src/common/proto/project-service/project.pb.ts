@@ -59,11 +59,11 @@ export interface ProjectFindAllRequest {}
 export interface ProjectFindAllResponse {
   status: number;
   error: string[];
-  data: ProjectResponseData[];
+  data: Project[];
 }
 
 export interface ProjectFindOneRequest {
-  id: string;
+  projectId: string;
 }
 
 export interface ProjectFindOneResponse {
@@ -77,7 +77,7 @@ export interface ProjectFindOneResponse {
  * Request
  */
 export interface ProjectUpdateRequest {
-  id: string;
+  projectId: string;
   data: UpdateProjectData | undefined;
 }
 
@@ -100,7 +100,7 @@ export interface UpdateProjectData {
  * Request
  */
 export interface ProjectRemoveRequest {
-  id: string;
+  projectId: string;
 }
 
 /** Response */
@@ -117,7 +117,7 @@ export interface RemoveData {}
  * Request
  */
 export interface FindAllTaskOfProjectRequest {
-  id: string;
+  projectId: string;
 }
 
 /** Response */
@@ -257,6 +257,24 @@ export interface AddTasksToProjectResponse {
 }
 
 /**
+ * RemoveTasksToProject
+ * RemoveTasksToProjectRequest
+ */
+export interface RemoveTasksToProjectRequest {
+  projectId: string;
+  tasksIds: string[];
+}
+
+/** RemoveTasksToProjectResponse */
+export interface RemoveTasksToProjectResponseData {}
+
+export interface RemoveTasksToProjectResponse {
+  status: number;
+  error: string[];
+  data: RemoveTasksToProjectResponseData | undefined;
+}
+
+/**
  * TaskCreate
  * Request
  */
@@ -295,7 +313,7 @@ export interface TaskFindAllResponse {
  * Request
  */
 export interface TaskFindOneRequest {
-  id: string;
+  taskId: string;
 }
 
 /** Response */
@@ -310,7 +328,7 @@ export interface TaskFindOneResponse {
  * Request
  */
 export interface TaskUpdateRequest {
-  id: string;
+  taskId: string;
   data: TaskUpdateData | undefined;
 }
 
@@ -333,7 +351,7 @@ export interface TaskUpdateData {
  * Request
  */
 export interface TaskRemoveRequest {
-  id: string;
+  taskId: string;
 }
 
 /** Response */
@@ -399,19 +417,78 @@ export interface SkillRequest {
   requiredSkillLevel: number;
 }
 
-/** Request */
+/**
+ * AddSkillToTask
+ * AddSkillToTaskRequest
+ */
 export interface AddSkillToTaskRequest {
   taskId: string;
   skills: SkillRequest[];
 }
 
-/** Response */
+/** AddSkillToTaskResponse */
 export interface AddSkillToTaskResponseData {}
 
 export interface AddSkillToTaskResponse {
   status: number;
   error: string[];
   data: AddSkillToTaskResponseData | undefined;
+}
+
+/**
+ * RemoveSkillToTask
+ * RemoveSkillToTaskRequest
+ */
+export interface RemoveSkillToTaskRequest {
+  taskId: string;
+  skillIds: string[];
+}
+
+/** RemoveSkillToTaskResponse */
+export interface RemoveSkillToTaskResponseData {}
+
+export interface RemoveSkillToTaskResponse {
+  status: number;
+  error: string[];
+  data: RemoveSkillToTaskResponseData | undefined;
+}
+
+/**
+ * AddLaborersToProject
+ * AddLaborersToProjectRequest
+ */
+export interface AddLaborersToProjectRequest {
+  projectId: string;
+  taskId: string;
+  laborers: string[];
+}
+
+export interface AddLaborersToProjectResponseData {}
+
+/** AddLaborersToProjectResponse */
+export interface AddLaborersToProjectResponse {
+  status: number;
+  error: string[];
+  data: AddLaborersToProjectResponseData | undefined;
+}
+
+/**
+ * RemoveLaborersToProject
+ * RemoveLaborersToProjectRequest
+ */
+export interface RemoveLaborersToProjectRequest {
+  projectId: string;
+  taskId: string;
+  laborers: string[];
+}
+
+/** RemoveLaborersToProjectResponse */
+export interface RemoveLaborersToProjectResponseData {}
+
+export interface RemoveLaborersToProjectResponse {
+  status: number;
+  error: string[];
+  data: RemoveLaborersToProjectResponseData | undefined;
 }
 
 export const PROJECT_PACKAGE_NAME = 'project';
@@ -436,6 +513,12 @@ export interface ProjectServiceClient {
   deactivateProject(request: DeactivateProjectRequest): Observable<DeactivateProjectResponse>;
 
   addTasksToProject(request: AddTasksToProjectRequest): Observable<AddTasksToProjectResponse>;
+
+  removeTasksToProject(request: RemoveTasksToProjectRequest): Observable<RemoveTasksToProjectResponse>;
+
+  addLaborersToProject(request: AddLaborersToProjectRequest): Observable<AddLaborersToProjectResponse>;
+
+  removeLaborersToProject(request: RemoveLaborersToProjectRequest): Observable<RemoveLaborersToProjectResponse>;
 }
 
 export interface ProjectServiceController {
@@ -478,6 +561,21 @@ export interface ProjectServiceController {
   addTasksToProject(
     request: AddTasksToProjectRequest,
   ): Promise<AddTasksToProjectResponse> | Observable<AddTasksToProjectResponse> | AddTasksToProjectResponse;
+
+  removeTasksToProject(
+    request: RemoveTasksToProjectRequest,
+  ): Promise<RemoveTasksToProjectResponse> | Observable<RemoveTasksToProjectResponse> | RemoveTasksToProjectResponse;
+
+  addLaborersToProject(
+    request: AddLaborersToProjectRequest,
+  ): Promise<AddLaborersToProjectResponse> | Observable<AddLaborersToProjectResponse> | AddLaborersToProjectResponse;
+
+  removeLaborersToProject(
+    request: RemoveLaborersToProjectRequest,
+  ):
+    | Promise<RemoveLaborersToProjectResponse>
+    | Observable<RemoveLaborersToProjectResponse>
+    | RemoveLaborersToProjectResponse;
 }
 
 export function ProjectServiceControllerMethods() {
@@ -493,6 +591,9 @@ export function ProjectServiceControllerMethods() {
       'activateProject',
       'deactivateProject',
       'addTasksToProject',
+      'removeTasksToProject',
+      'addLaborersToProject',
+      'removeLaborersToProject',
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
@@ -524,6 +625,8 @@ export interface TaskServiceClient {
   deactivateTask(request: DeactivateTaskRequest): Observable<DeactivateTaskResponse>;
 
   addSkillToTask(request: AddSkillToTaskRequest): Observable<AddSkillToTaskResponse>;
+
+  removeSkillToTask(request: RemoveSkillToTaskRequest): Observable<RemoveSkillToTaskResponse>;
 }
 
 export interface TaskServiceController {
@@ -552,6 +655,10 @@ export interface TaskServiceController {
   addSkillToTask(
     request: AddSkillToTaskRequest,
   ): Promise<AddSkillToTaskResponse> | Observable<AddSkillToTaskResponse> | AddSkillToTaskResponse;
+
+  removeSkillToTask(
+    request: RemoveSkillToTaskRequest,
+  ): Promise<RemoveSkillToTaskResponse> | Observable<RemoveSkillToTaskResponse> | RemoveSkillToTaskResponse;
 }
 
 export function TaskServiceControllerMethods() {
@@ -565,6 +672,7 @@ export function TaskServiceControllerMethods() {
       'activateTask',
       'deactivateTask',
       'addSkillToTask',
+      'removeSkillToTask',
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
