@@ -1,5 +1,5 @@
 import { plainToClass, Transform } from 'class-transformer';
-import { IsMongoId, IsString, ValidateNested } from 'class-validator';
+import { IsMongoId, IsNumber, IsString, ValidateNested } from 'class-validator';
 import { TransformEnums } from 'src/common/helpers/enum.helpers';
 
 import * as PROTO from 'src/common/proto/project-service/project.pb';
@@ -29,11 +29,19 @@ export class FieldsOverridesDto implements PROTO.FieldsOverrides {
 }
 
 export class ProjetTaskDto implements PROTO.ProjectTask {
+  
   @IsMongoId()
   task: string;
 
   @IsMongoId({ each: true })
   laborers: string[];
+
+  
+  @IsNumber()
+  durationInWorkDays: number;
+  
+  @IsNumber()
+  effort: number;
 
   fieldsOverrides?: PROTO.FieldsOverrides;
 }
@@ -91,11 +99,11 @@ export class CreateProjectDto implements PROTO.ProjectCreateRequest {
   @IsString()
   responsible: string;
 
-  @IsString()
-  startDate: string;
+  @IsNumber()
+  startDate: number;
 
-  @IsString()
-  expectedFinishedDate: string;
+  @IsNumber()
+  expectedFinishedDate: number;
 
   @Transform(({ value }) => plainToClass(AddressDto, value))
   @ValidateNested()
@@ -129,8 +137,7 @@ export class AddTaskToProjectDto implements PROTO.AddTasksToProjectRequest {
   @IsMongoId()
   projectId: string;
 
-  @IsMongoId({ each: true })
-  tasksIds: string[];
+  tasks: PROTO.ProjectTaskRequestData[];
 }
 
 export class RemoveTaskToProjectDto implements PROTO.RemoveTasksToProjectRequest {

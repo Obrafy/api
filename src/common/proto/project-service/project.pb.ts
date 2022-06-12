@@ -39,8 +39,8 @@ export interface ProjectResponseData {
  * Request
  */
 export interface ProjectCreateRequest {
-  startDate: string;
-  expectedFinishedDate: string;
+  startDate: number;
+  expectedFinishedDate: number;
   responsible: string;
   address: Address | undefined;
   tasks: string[];
@@ -90,8 +90,8 @@ export interface ProjectUpdateResponse {
 
 export interface UpdateProjectData {
   status?: Status | undefined;
-  startDate?: string | undefined;
-  expectedFinishedDate?: string | undefined;
+  startDate?: number | undefined;
+  expectedFinishedDate?: number | undefined;
   responsible?: string | undefined;
 }
 
@@ -128,13 +128,11 @@ export interface FindAllTaskOfProjectResponse {
 }
 
 export interface FindAllTaskOfProjectData {
-  category: string;
-  activity: string;
-  noiseLevel: LevelType;
-  dirtLevel: LevelType;
-  description: string;
-  unity: UnityType;
-  possibleSkills: PossibleSkills[];
+  task: string;
+  laborers: string[];
+  effort: number;
+  durationInWorkDays: number;
+  fieldsOverrides?: FieldsOverrides | undefined;
 }
 
 /**
@@ -151,7 +149,15 @@ export interface FieldsOverridesRequest {
 export interface FieldsOverridesResponse {
   status: number;
   error: string[];
-  data: FieldsOverrides | undefined;
+  data: FieldsOverridesTaskOfProjectData | undefined;
+}
+
+export interface FieldsOverridesTaskOfProjectData {
+  task: string;
+  laborers: string[];
+  effort: number;
+  durationInWorkDays: number;
+  fieldsOverrides?: FieldsOverrides | undefined;
 }
 
 export interface FieldsOverrides {
@@ -161,6 +167,7 @@ export interface FieldsOverrides {
   dirtLevel?: LevelType | undefined;
   description?: string | undefined;
   unity?: UnityType | undefined;
+  priority?: number | undefined;
 }
 
 export interface Project {
@@ -176,6 +183,8 @@ export interface Project {
 export interface ProjectTask {
   task: string;
   laborers: string[];
+  effort: number;
+  durationInWorkDays: number;
   fieldsOverrides?: FieldsOverrides | undefined;
 }
 
@@ -196,7 +205,9 @@ export interface Task {
   description: string;
   unity: UnityType;
   possibleSkills: PossibleSkills[];
-  laborers: string[];
+  id: string;
+  status: string;
+  priority: number;
 }
 
 export interface PossibleSkills {
@@ -242,9 +253,15 @@ export interface DeactivateProjectResponse {
  * AddTasksToProject
  * Request
  */
+export interface ProjectTaskRequestData {
+  tasksIds: string;
+  effort: number;
+  durationInWorkDays: number;
+}
+
 export interface AddTasksToProjectRequest {
   projectId: string;
-  tasksIds: string[];
+  tasks: ProjectTaskRequestData[];
 }
 
 /** Response */
@@ -253,7 +270,7 @@ export interface AddTasksToProjectResponseData {}
 export interface AddTasksToProjectResponse {
   status: number;
   error: string[];
-  data: AddTasksToProjectResponse | undefined;
+  data: AddTasksToProjectResponseData | undefined;
 }
 
 /**
@@ -286,13 +303,14 @@ export interface TaskCreateRequest {
   description: string;
   unity: UnityType;
   possibleSkills: PossibleSkills[];
+  priority: number;
 }
 
 /** Response */
 export interface TaskCreateResponse {
   status: number;
   error: string[];
-  data: TaskResponseData | undefined;
+  data: Task | undefined;
 }
 
 /**
@@ -305,7 +323,7 @@ export interface TaskFindAllRequest {}
 export interface TaskFindAllResponse {
   status: number;
   error: string[];
-  data: TaskResponseData[];
+  data: Task[];
 }
 
 /**
@@ -320,7 +338,7 @@ export interface TaskFindOneRequest {
 export interface TaskFindOneResponse {
   status: number;
   error: string[];
-  data: TaskResponseData | undefined;
+  data: Task | undefined;
 }
 
 /**
@@ -336,7 +354,7 @@ export interface TaskUpdateRequest {
 export interface TaskUpdateResponse {
   status: number;
   error: string[];
-  data: TaskResponseData | undefined;
+  data: Task | undefined;
 }
 
 export interface TaskUpdateData {
@@ -344,6 +362,7 @@ export interface TaskUpdateData {
   activity?: string | undefined;
   noiseLevel?: string | undefined;
   dirtLevel?: string | undefined;
+  priority?: number | undefined;
 }
 
 /**
@@ -354,28 +373,13 @@ export interface TaskRemoveRequest {
   taskId: string;
 }
 
+export interface TaskRemoveDataResponse {}
+
 /** Response */
 export interface TaskRemoveResponse {
   status: number;
   error: string[];
   data: TaskRemoveDataResponse | undefined;
-}
-
-export interface TaskRemoveDataResponse {}
-
-export interface TaskResponse {
-  category: string;
-  activity: string;
-  noiseLevel: LevelType;
-  dirtLevel: LevelType;
-  description: string;
-  unity: UnityType;
-  possibleSkills: PossibleSkills[];
-  status: Status;
-}
-
-export interface TaskResponseData {
-  task: TaskResponse | undefined;
 }
 
 /**

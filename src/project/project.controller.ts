@@ -38,9 +38,10 @@ export class ProjectController {
     };
   }
 
-  @Get('project/:id')
+  @Get('project/:projectId')
   @UseInterceptors(ClassSerializerInterceptor)
   async findProject(@Param('projectId') projectId: DTO.FindProjectDto['projectId']): Promise<PROTO.ProjectFindOneResponse> {
+    console.log("projectId", projectId)
     const { data, error, status } = await this.projectService.findProject({ projectId });
 
     if (data && data.project) {
@@ -50,34 +51,35 @@ export class ProjectController {
     return { data, error, status };
   }
 
-  @Delete('project/:id')
+  @Delete('project/:projectId')
   @UseInterceptors(ClassSerializerInterceptor)
   async removeProject(@Param('projectId') projectId: DTO.RemoveProjectDto['projectId']): Promise<PROTO.ProjectRemoveResponse> {
     return await this.projectService.removeProject({ projectId });
   }
 
-  @Post('project/:id/activate')
+  @Post('project/:projectId/activate')
   @UseInterceptors(ClassSerializerInterceptor)
   async activateProject(@Param('projectId') projectId: DTO.ProjectStatusDto['projectId']): Promise<PROTO.ActivateProjectResponse> {
     return await this.projectService.activateProject({ projectId });
   }
 
-  @Post('project/:id/deactivate')
+  @Post('project/:projectId/deactivate')
   @UseInterceptors(ClassSerializerInterceptor)
   async deactivateProject(@Param('projectId') projectId: DTO.ProjectStatusDto['projectId']): Promise<PROTO.DeactivateProjectResponse> {
     return await this.projectService.deactivateProject({ projectId });
   }
 
-  @Post('project/:id/tasks')
+  @Post('project/:projectId/tasks')
   @UseInterceptors(ClassSerializerInterceptor)
   async addTasksToProject(
     @Param('projectId') projectId: DTO.AddTaskToProjectDto['projectId'],
-    @Body('tasksIds') tasksIds: DTO.AddTaskToProjectDto['tasksIds']
+    @Body('tasks') tasks: DTO.AddTaskToProjectDto['tasks']
   ): Promise<PROTO.AddTasksToProjectResponse> {
-    return await this.projectService.addTasksToProject({ projectId, tasksIds });
+    console.log('projectId', projectId, 'tasks', tasks)
+    return await this.projectService.addTasksToProject({ projectId, tasks });
   }
 
-  @Delete('project/:id/tasks')
+  @Delete('project/:projectId/tasks')
   @UseInterceptors(ClassSerializerInterceptor)
   async removeTasksToProject(
     @Param('projectId') projectId: DTO.RemoveTaskToProjectDto['projectId'],
@@ -86,7 +88,7 @@ export class ProjectController {
     return await this.projectService.removeTasksToProject({ projectId, tasksIds });
   }
 
-  @Post('project/:id/laborers')
+  @Post('project/:projectId/:taskId/laborers')
   @UseInterceptors(ClassSerializerInterceptor)
   async addLaborersToProject(
     @Param('projectId') projectId: DTO.LaborersToProjectDto['projectId'],
@@ -96,7 +98,7 @@ export class ProjectController {
     return await this.projectService.addLaborersToProject({ projectId, taskId, laborers });
   }
 
-  @Delete('project/:id/laborers')
+  @Delete('project/:projectId/:taskId/laborers')
   @UseInterceptors(ClassSerializerInterceptor)
   async removeLaborersToProject(
     @Param('projectId') projectId: DTO.LaborersToProjectDto['projectId'],

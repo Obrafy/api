@@ -44,8 +44,8 @@ export class ProjectService {
     return await firstValueFrom(this.projectServiceClient.deactivateProject(deactivateProjectDto));
   }
 
-  async addTasksToProject({ projectId, tasksIds }: DTO.AddTaskToProjectDto): Promise<PROTO.AddTasksToProjectResponse> {
-    return await firstValueFrom(this.projectServiceClient.addTasksToProject({ projectId, tasksIds }));
+  async addTasksToProject({ projectId, tasks }: DTO.AddTaskToProjectDto): Promise<PROTO.AddTasksToProjectResponse> {
+    return await firstValueFrom(this.projectServiceClient.addTasksToProject({ projectId, tasks }));
   }
 
   async removeTasksToProject({ projectId, tasksIds }: DTO.RemoveTaskToProjectDto): Promise<PROTO.RemoveTasksToProjectResponse> {
