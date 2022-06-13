@@ -1,6 +1,5 @@
-
-import { plainToClass, Transform } from 'class-transformer';
-import { IsMongoId, IsNumber, IsString } from 'class-validator';
+import { plainToClass, Transform, Type } from 'class-transformer';
+import { IsMongoId, IsNumber, IsString, ValidateNested } from 'class-validator';
 import { TransformEnums } from 'src/common/helpers/enum.helpers';
 import * as PROTO from 'src/common/proto/project-service/project.pb';
 
@@ -68,13 +67,35 @@ export class RemoveTaskDto implements PROTO.TaskRemoveRequest {
 }
 
 export class TaskStatustDto implements PROTO.ActivateTaskRequest, PROTO.DeactivateTaskRequest {
-  
+
   @IsMongoId()
   taskId: string;
 }
 
+export class SkillDto implements PROTO.SkillRequest {
+  @IsMongoId()
+  id: string;
 
+  @IsNumber()
+  requiredSkillLevel: number;
+}
 
+export class AddSkillToTaskDto implements PROTO.AddSkillToTaskRequest {
+  @IsMongoId()
+  taskId: string;
+
+  @Type(() => SkillDto)
+  @ValidateNested()
+  skills: SkillDto[];
+}
+
+export class RemoveSkillToTaskDto implements PROTO.RemoveSkillToTaskRequest {
+  @IsMongoId()
+  taskId: string;
+
+  @IsMongoId({ each: true })
+  skillIds: string[];
+}
 
 export class CreateTaskDto implements PROTO.TaskCreateRequest {
   activity: string;

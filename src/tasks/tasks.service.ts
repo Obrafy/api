@@ -48,6 +48,14 @@ export class TasksService {
     return await firstValueFrom(this.taskServiceClient.deactivateTask(deactivateTaskDto));
   }
 
+  async addSkillToTask(addSkillToTaskDto: DTO.AddSkillToTaskDto): Promise<PROTO.AddSkillToTaskResponse> {
+    return await firstValueFrom(this.taskServiceClient.addSkillToTask(addSkillToTaskDto));
+  }
+
+  async removeSkillToTask(removeSkillToTaskDto: DTO.RemoveSkillToTaskDto): Promise<PROTO.RemoveSkillToTaskResponse> {
+    return await firstValueFrom(this.taskServiceClient.removeSkillToTask(removeSkillToTaskDto));
+  }
+
   // update(id: number, updateTaskDto: UpdateTaskDto) {
   //   return `This action updates a #${id} task`;
   // }

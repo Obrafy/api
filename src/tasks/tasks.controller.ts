@@ -63,6 +63,20 @@ export class TasksController {
     return await this.tasksService.deactivateTask({ taskId });
   }
 
+  @Post('task/:taskId/skills')
+  async addSkillToTask(
+    @Param('taskId') taskId: DTO.AddSkillToTaskDto['taskId'],
+    @Body('skills') skills: DTO.AddSkillToTaskDto['skills']): Promise<PROTO.AddSkillToTaskResponse> {
+    return await this.tasksService.addSkillToTask({ taskId, skills });
+  }
+
+  @Delete('task/:taskId/skills')
+  async removeSkillToTask(
+    @Param('taskId') taskId: DTO.RemoveSkillToTaskDto['taskId'],
+    @Body('skillIds') skillIds: DTO.RemoveSkillToTaskDto['skillIds']
+  ): Promise<PROTO.RemoveSkillToTaskResponse> {
+    return await this.tasksService.removeSkillToTask({ taskId, skillIds });
+  }
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
