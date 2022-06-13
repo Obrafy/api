@@ -24,17 +24,16 @@ export class TasksService {
     this.taskServiceClient = this.grpcClient.getService<PROTO.TaskServiceClient>(PROTO.TASK_SERVICE_NAME);
   }
 
-  create(createTaskDto: CreateTaskDto) {
-    return 'This action adds a new task';
+  async createTask(createTaskDto: CreateTaskDto): Promise<PROTO.TaskCreateResponse> {
+    return await firstValueFrom(this.taskServiceClient.create(createTaskDto));
   }
 
-  async findAllTasks(findAllTasksDto: DTO.FindAllTasksDto) {
-    console.log(" ------------ TESTE -------------")
+  async findAllTasks(findAllTasksDto: DTO.FindAllTasksDto): Promise<PROTO.TaskFindAllResponse> {
     return await firstValueFrom(this.taskServiceClient.findAll(findAllTasksDto));
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} task`;
+  async findOneTask(findTaskDto: DTO.FindTaskDto): Promise<PROTO.TaskFindOneResponse> {
+    return await firstValueFrom(this.taskServiceClient.findOne(findTaskDto));
   }
 
   // update(id: number, updateTaskDto: UpdateTaskDto) {

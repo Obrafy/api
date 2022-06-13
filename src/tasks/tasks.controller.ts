@@ -14,7 +14,7 @@ export class TasksController {
 
   @Post()
   create(@Body() createTaskDto: DTO.CreateTaskDto) {
-    return this.tasksService.create(createTaskDto);
+    return this.tasksService.createTask(createTaskDto);
   }
 
   @Get('tasks')
@@ -34,30 +34,10 @@ export class TasksController {
     }
   }
 
-
-
-  // @Get('projects')
-  // @UseInterceptors(ClassSerializerInterceptor)
-  // async findAllProjects(@Body() findAllProjectsDto: DTO.FindAllProjectsDto): Promise<PROTO.ProjectFindAllResponse> {
-  //   const { data, error, status } = await this.projectService.findAllProjects(findAllProjectsDto);
-  //   let projects = [];
-
-  //   if (data && data.length > 0) {
-  //     projects = data.map((project) => new DTO.ProjectDto(project));
-  //   }
-
-  //   return {
-  //     error,
-  //     data: projects,
-  //     status,
-  //   };
-  // }
-
-
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tasksService.findOne(+id);
+  @Get('task/:taskId')
+  @UseInterceptors(ClassSerializerInterceptor)
+  findOne(@Param('taskId') taskId: DTO.FindTaskDto['taskId']): Promise<PROTO.TaskFindOneResponse> {
+    return this.tasksService.findOneTask({ taskId });
   }
 
   // @Patch(':id')

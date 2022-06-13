@@ -10,7 +10,7 @@ import { UnityType as InternalUnityType } from '../../common/enums/unity-type.en
 
 
 export class PossibleSkillsDto implements PROTO.PossibleSkills {
-  
+
   @IsNumber()
   requiredSkillLevel: number;
 
@@ -53,6 +53,14 @@ export class TaskDto implements PROTO.Task {
   @Transform(({ value }) => value.map((v: any) => plainToClass(PossibleSkillsDto, v)))
   possibleSkills: PROTO.PossibleSkills[];
 }
+
+export class FindTaskDto implements PROTO.TaskFindOneRequest {
+  
+  @IsMongoId()
+  taskId: string;
+}
+
+
 
 export class CreateTaskDto implements PROTO.TaskCreateRequest {
   activity: string;
