@@ -3,9 +3,9 @@ import { IsMongoId, IsNumber, IsString, ValidateNested } from 'class-validator';
 import { TransformEnums } from 'src/common/helpers/enum.helpers';
 
 import * as PROTO from 'src/common/proto/project-service/project.pb';
-import { Status as InternalStatus } from 'src/project/enums/status.enum';
-import { LevelType as InternalLevelType } from 'src/project/enums/level-type.enum';
-import { UnityType as InternalUnityType } from 'src/project/enums/unity-type.enum';
+import { Status as InternalStatus } from '../../common/enums/status.enum';
+import { LevelType as InternalLevelType } from '../../common/enums/level-type.enum';
+import { UnityType as InternalUnityType } from '../../common/enums/unity-type.enum';
 
 // Base Types
 export class FieldsOverridesDto implements PROTO.FieldsOverrides {
@@ -29,17 +29,15 @@ export class FieldsOverridesDto implements PROTO.FieldsOverrides {
 }
 
 export class ProjetTaskDto implements PROTO.ProjectTask {
-  
   @IsMongoId()
   task: string;
 
   @IsMongoId({ each: true })
   laborers: string[];
 
-  
   @IsNumber()
   durationInWorkDays: number;
-  
+
   @IsNumber()
   effort: number;
 
@@ -116,7 +114,7 @@ export class CreateProjectDto implements PROTO.ProjectCreateRequest {
   status: PROTO.Status;
 }
 
-export class FindAllProjectsDto implements PROTO.ProjectFindAllRequest { }
+export class FindAllProjectsDto implements PROTO.ProjectFindAllRequest {}
 
 export class FindProjectDto implements PROTO.ProjectFindOneRequest {
   @IsMongoId()
