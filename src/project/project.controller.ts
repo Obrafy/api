@@ -14,7 +14,7 @@ import * as DTO from 'src/project/dto/project.dto';
 import * as PROTO from 'src/common/proto/project-service/project.pb';
 @Controller()
 export class ProjectController {
-  constructor(private readonly projectService: ProjectService) { }
+  constructor(private readonly projectService: ProjectService) {}
 
   @Post('projects')
   async createProject(@Body() createProjectDto: DTO.CreateProjectDto): Promise<PROTO.ProjectCreateResponse> {
@@ -40,8 +40,10 @@ export class ProjectController {
 
   @Get('project/:projectId')
   @UseInterceptors(ClassSerializerInterceptor)
-  async findProject(@Param('projectId') projectId: DTO.FindProjectDto['projectId']): Promise<PROTO.ProjectFindOneResponse> {
-    console.log("projectId", projectId)
+  async findProject(
+    @Param('projectId') projectId: DTO.FindProjectDto['projectId'],
+  ): Promise<PROTO.ProjectFindOneResponse> {
+    console.log('projectId', projectId);
     const { data, error, status } = await this.projectService.findProject({ projectId });
 
     if (data && data.project) {
@@ -53,19 +55,25 @@ export class ProjectController {
 
   @Delete('project/:projectId')
   @UseInterceptors(ClassSerializerInterceptor)
-  async removeProject(@Param('projectId') projectId: DTO.RemoveProjectDto['projectId']): Promise<PROTO.ProjectRemoveResponse> {
+  async removeProject(
+    @Param('projectId') projectId: DTO.RemoveProjectDto['projectId'],
+  ): Promise<PROTO.ProjectRemoveResponse> {
     return await this.projectService.removeProject({ projectId });
   }
 
   @Post('project/:projectId/activate')
   @UseInterceptors(ClassSerializerInterceptor)
-  async activateProject(@Param('projectId') projectId: DTO.ProjectStatusDto['projectId']): Promise<PROTO.ActivateProjectResponse> {
+  async activateProject(
+    @Param('projectId') projectId: DTO.ProjectStatusDto['projectId'],
+  ): Promise<PROTO.ActivateProjectResponse> {
     return await this.projectService.activateProject({ projectId });
   }
 
   @Post('project/:projectId/deactivate')
   @UseInterceptors(ClassSerializerInterceptor)
-  async deactivateProject(@Param('projectId') projectId: DTO.ProjectStatusDto['projectId']): Promise<PROTO.DeactivateProjectResponse> {
+  async deactivateProject(
+    @Param('projectId') projectId: DTO.ProjectStatusDto['projectId'],
+  ): Promise<PROTO.DeactivateProjectResponse> {
     return await this.projectService.deactivateProject({ projectId });
   }
 
@@ -73,9 +81,9 @@ export class ProjectController {
   @UseInterceptors(ClassSerializerInterceptor)
   async addTasksToProject(
     @Param('projectId') projectId: DTO.AddTaskToProjectDto['projectId'],
-    @Body('tasks') tasks: DTO.AddTaskToProjectDto['tasks']
+    @Body('tasks') tasks: DTO.AddTaskToProjectDto['tasks'],
   ): Promise<PROTO.AddTasksToProjectResponse> {
-    console.log('projectId', projectId, 'tasks', tasks)
+    console.log('projectId', projectId, 'tasks', tasks);
     return await this.projectService.addTasksToProject({ projectId, tasks });
   }
 
@@ -83,7 +91,7 @@ export class ProjectController {
   @UseInterceptors(ClassSerializerInterceptor)
   async removeTasksToProject(
     @Param('projectId') projectId: DTO.RemoveTaskToProjectDto['projectId'],
-    @Body('tasksIds') tasksIds: DTO.RemoveTaskToProjectDto['tasksIds']
+    @Body('tasksIds') tasksIds: DTO.RemoveTaskToProjectDto['tasksIds'],
   ): Promise<PROTO.RemoveTasksToProjectResponse> {
     return await this.projectService.removeTasksToProject({ projectId, tasksIds });
   }
@@ -93,7 +101,7 @@ export class ProjectController {
   async addLaborersToProject(
     @Param('projectId') projectId: DTO.LaborersToProjectDto['projectId'],
     @Param('taskId') taskId: DTO.LaborersToProjectDto['taskId'],
-    @Body('laborers') laborers: DTO.LaborersToProjectDto['laborers']
+    @Body('laborers') laborers: DTO.LaborersToProjectDto['laborers'],
   ): Promise<PROTO.AddLaborersToProjectResponse> {
     return await this.projectService.addLaborersToProject({ projectId, taskId, laborers });
   }
@@ -103,10 +111,8 @@ export class ProjectController {
   async removeLaborersToProject(
     @Param('projectId') projectId: DTO.LaborersToProjectDto['projectId'],
     @Param('taskId') taskId: DTO.LaborersToProjectDto['taskId'],
-    @Body('laborers') laborers: DTO.LaborersToProjectDto['laborers']
+    @Body('laborers') laborers: DTO.LaborersToProjectDto['laborers'],
   ): Promise<PROTO.RemoveLaborersToProjectResponse> {
     return await this.projectService.removeLaborersToProject({ projectId, taskId, laborers });
   }
-
-
 }

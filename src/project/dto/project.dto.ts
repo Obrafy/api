@@ -29,17 +29,15 @@ export class FieldsOverridesDto implements PROTO.FieldsOverrides {
 }
 
 export class ProjetTaskDto implements PROTO.ProjectTask {
-  
   @IsMongoId()
   task: string;
 
   @IsMongoId({ each: true })
   laborers: string[];
 
-  
   @IsNumber()
   durationInWorkDays: number;
-  
+
   @IsNumber()
   effort: number;
 
@@ -116,7 +114,7 @@ export class CreateProjectDto implements PROTO.ProjectCreateRequest {
   status: PROTO.Status;
 }
 
-export class FindAllProjectsDto implements PROTO.ProjectFindAllRequest { }
+export class FindAllProjectsDto implements PROTO.ProjectFindAllRequest {}
 
 export class FindProjectDto implements PROTO.ProjectFindOneRequest {
   @IsMongoId()

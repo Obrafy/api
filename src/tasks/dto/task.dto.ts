@@ -7,9 +7,7 @@ import { Status as InternalStatus } from '../../common/enums/status.enum';
 import { LevelType as InternalLevelType } from '../../common/enums/level-type.enum';
 import { UnityType as InternalUnityType } from '../../common/enums/unity-type.enum';
 
-
 export class PossibleSkillsDto implements PROTO.PossibleSkills {
-
   @IsNumber()
   requiredSkillLevel: number;
 
@@ -54,20 +52,16 @@ export class TaskDto implements PROTO.Task {
 }
 
 export class FindTaskDto implements PROTO.TaskFindOneRequest {
-
   @IsMongoId()
   taskId: string;
 }
 
-
 export class RemoveTaskDto implements PROTO.TaskRemoveRequest {
-
   @IsMongoId()
   taskId: string;
 }
 
 export class TaskStatustDto implements PROTO.ActivateTaskRequest, PROTO.DeactivateTaskRequest {
-
   @IsMongoId()
   taskId: string;
 }
@@ -108,5 +102,4 @@ export class CreateTaskDto implements PROTO.TaskCreateRequest {
   unity: PROTO.UnityType;
 }
 
-export class FindAllTasksDto implements PROTO.TaskFindAllRequest { }
-
+export class FindAllTasksDto implements PROTO.TaskFindAllRequest {}

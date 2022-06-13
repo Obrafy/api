@@ -31,6 +31,6 @@ import { TasksController } from './tasks.controller';
     ]),
   ],
   controllers: [TasksController],
-  providers: [TasksService]
+  providers: [TasksService],
 })
-export class TasksModule { }
+export class TasksModule {}

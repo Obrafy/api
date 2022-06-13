@@ -8,12 +8,10 @@ import * as DTO from 'src/tasks/dto/task.dto';
 
 @Injectable()
 export class TasksService {
-
   private taskServiceClient: PROTO.TaskServiceClient;
 
   @Inject(PROTO.PROJECT_PACKAGE_NAME)
   private readonly grpcClient: ClientGrpc;
-
 
   /**
    * This runs once when the module's instantiate the service.
@@ -60,10 +58,6 @@ export class TasksService {
   //   return `This action updates a #${id} task`;
   // }
 }
-
-
-
-
 
 // @Injectable()
 // export class ProjectService {
