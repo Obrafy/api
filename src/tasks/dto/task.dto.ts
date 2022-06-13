@@ -55,10 +55,24 @@ export class TaskDto implements PROTO.Task {
 }
 
 export class FindTaskDto implements PROTO.TaskFindOneRequest {
+
+  @IsMongoId()
+  taskId: string;
+}
+
+
+export class RemoveTaskDto implements PROTO.TaskRemoveRequest {
+
+  @IsMongoId()
+  taskId: string;
+}
+
+export class TaskStatustDto implements PROTO.ActivateTaskRequest, PROTO.DeactivateTaskRequest {
   
   @IsMongoId()
   taskId: string;
 }
+
 
 
 

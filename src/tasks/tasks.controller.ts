@@ -12,14 +12,14 @@ import * as PROTO from 'src/common/proto/project-service/project.pb';
 export class TasksController {
   constructor(private readonly tasksService: TasksService) { }
 
-  @Post()
-  create(@Body() createTaskDto: DTO.CreateTaskDto) {
-    return this.tasksService.createTask(createTaskDto);
+  @Post('tasks')
+  async createTask(@Body() createTaskDto: DTO.CreateTaskDto) {
+    return await this.tasksService.createTask(createTaskDto);
   }
 
   @Get('tasks')
   @UseInterceptors(ClassSerializerInterceptor)
-  async findAll(@Body() findAllProjectsDto: DTO.FindAllTasksDto): Promise<PROTO.TaskFindAllResponse> {
+  async findAllTasks(@Body() findAllProjectsDto: DTO.FindAllTasksDto): Promise<PROTO.TaskFindAllResponse> {
     const { data, error, status } = await this.tasksService.findAllTasks(findAllProjectsDto)
     let tasks = [];
 
@@ -36,17 +36,37 @@ export class TasksController {
 
   @Get('task/:taskId')
   @UseInterceptors(ClassSerializerInterceptor)
-  findOne(@Param('taskId') taskId: DTO.FindTaskDto['taskId']): Promise<PROTO.TaskFindOneResponse> {
-    return this.tasksService.findOneTask({ taskId });
+  async findOneTask(@Param('taskId') taskId: DTO.FindTaskDto['taskId']): Promise<PROTO.TaskFindOneResponse> {
+    let { data, error, status } = await this.tasksService.findOneTask({ taskId });
+
+    if (data) {
+      data = new DTO.TaskDto(data);
+    }
+
+    return { data, error, status };
   }
+
+  @Delete('task/:taskId')
+  @UseInterceptors(ClassSerializerInterceptor)
+  async removeTask(@Param('taskId') taskId: DTO.RemoveTaskDto['taskId']): Promise<PROTO.TaskRemoveResponse> {
+    return await this.tasksService.removeTask({ taskId });
+  }
+
+
+  @Post('task/:taskId/activate')
+  async activateTask(@Param('taskId') taskId: DTO.TaskStatustDto['taskId']): Promise<PROTO.ActivateTaskResponse> {
+    return await this.tasksService.activateTask({ taskId });
+  }
+
+  @Post('task/:taskId/deactivate')
+  async deactivateTask(@Param('taskId') taskId: DTO.TaskStatustDto['taskId']): Promise<PROTO.DeactivateTaskResponse> {
+    return await this.tasksService.deactivateTask({ taskId });
+  }
+
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
   //   return this.tasksService.update(+id, updateTaskDto);
   // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tasksService.remove(+id);
-  }
 }

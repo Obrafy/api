@@ -36,13 +36,21 @@ export class TasksService {
     return await firstValueFrom(this.taskServiceClient.findOne(findTaskDto));
   }
 
+  async removeTask(removeTaskDto: DTO.FindTaskDto): Promise<PROTO.TaskRemoveResponse> {
+    return await firstValueFrom(this.taskServiceClient.remove(removeTaskDto));
+  }
+
+  async activateTask(activateTaskDto: DTO.TaskStatustDto): Promise<PROTO.ActivateTaskResponse> {
+    return await firstValueFrom(this.taskServiceClient.activateTask(activateTaskDto));
+  }
+
+  async deactivateTask(deactivateTaskDto: DTO.TaskStatustDto): Promise<PROTO.DeactivateTaskResponse> {
+    return await firstValueFrom(this.taskServiceClient.deactivateTask(deactivateTaskDto));
+  }
+
   // update(id: number, updateTaskDto: UpdateTaskDto) {
   //   return `This action updates a #${id} task`;
   // }
-
-  remove(id: number) {
-    return `This action removes a #${id} task`;
-  }
 }
 
 
