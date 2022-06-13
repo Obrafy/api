@@ -13,4 +13,7 @@ export default (): ConfigInterface => ({
 
   AUTHENTICATION_HOST: process.env.HOST,
   AUTHENTICATION_PORT: parseInt(process.env.PORT, 10),
+
+  PROJECT_HOST: process.env.HOST,
+  PROJECT_PORT: parseInt(process.env.PORT, 10),
 });

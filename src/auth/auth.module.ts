@@ -3,29 +3,28 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { ConfigInterface } from 'src/config';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
-import { AUTH_PACKAGE_NAME, AUTH_SERVICE_NAME } from './dto/proto/auth.pb';
+import { AuthController } from './controllers/auth.controller';
+import { UserManagementController } from './controllers/user-management.controller';
 
-const makeMicroserviceUrl = (host: string, port: string) => {
-  return `${host}:${port}`;
-};
+import { AuthService } from './auth.service';
+import * as PROTO from 'src/common/proto/authentication-service/auth.pb';
+import makeMicroserviceUrl from 'src/common/helpers/microservice-url.helpers';
 
 @Global()
 @Module({
   imports: [
     ClientsModule.registerAsync([
       {
-        name: AUTH_SERVICE_NAME,
+        name: PROTO.AUTH_PACKAGE_NAME,
         useFactory: (configService: ConfigService<ConfigInterface>) => ({
           transport: Transport.GRPC,
           options: {
             url: makeMicroserviceUrl(
-              configService.get('AUTHENTICATION_HOST', { infer: true }),
-              configService.get('AUTHENTICATION_PORT', { infer: true }),
+              configService.get('PROJECT_HOST', { infer: true }),
+              configService.get('PROJECT_PORT', { infer: true }),
             ),
-            package: AUTH_PACKAGE_NAME,
-            protoPath: join('node_modules', 'proto', 'proto-files', 'auth.proto'),
+            package: PROTO.AUTH_PACKAGE_NAME,
+            protoPath: join('node_modules', 'proto', 'proto-files', 'authentication-service', 'auth.proto'),
           },
         }),
         inject: [ConfigService],
@@ -33,7 +32,7 @@ const makeMicroserviceUrl = (host: string, port: string) => {
       },
     ]),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, UserManagementController],
   providers: [AuthService],
   exports: [AuthService],
 })

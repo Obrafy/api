@@ -15,4 +15,7 @@ export interface ConfigInterface {
 
   AUTHENTICATION_HOST: string;
   AUTHENTICATION_PORT: number;
+
+  PROJECT_HOST: string;
+  PROJECT_PORT: number;
 }
